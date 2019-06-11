@@ -13,60 +13,65 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center_vertical"
-        android:weightSum="3">
+        android:orientation="horizontal"
+        android:weightSum="4">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Order Details"
-            android:textColor="#444"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:gravity="right"
+        <Button
+            android:id="@+id/btn_month"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textStyle="bold"
-            android:textSize="15dp"
-            android:text="₹435.00"></TextView>
+            android:background="@null"
+            android:drawableTop="@drawable/ic_clear_all_black_24dp"
+            android:drawablePadding="8dp"
+            android:gravity="left|center_vertical"
+            android:text="Month"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableTop="@drawable/ic_view_week_black_24dp"
+            android:drawablePadding="8dp"
+            android:gravity="left|center_vertical"
+            android:text="Week"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableTop="@drawable/ic_today_black_24dp"
+            android:drawablePadding="8dp"
+            android:gravity="left|center_vertical"
+            android:text="Day"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableTop="@drawable/ic_event_available_black_24dp"
+            android:drawablePadding="8dp"
+            android:gravity="left|center_vertical"
+            android:text="Event"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="12sp" />
+
     </LinearLayout>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chicken Fried Rice 1x1" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Paneer Tikka 1x2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delivery Address"
-        android:textColor="#444"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Flat No 404, Skyline Apartments, Vizag - 500576" />
-
-    <Button
-        android:id="@+id/btnBottomSheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="#000"
-        android:foreground="?attr/selectableItemBackground"
-        android:text="PROCEED PAYMENT"
-        android:textColor="#fff" />
-
 </LinearLayout>
