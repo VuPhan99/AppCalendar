@@ -18,12 +18,6 @@
         tools:layout="@layout/fragment_top" />
 
     <fragment
-        android:id="@+id/fragment_center"
-        class="com.xuanvu.calendar.View.Fragment_Center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <fragment
         android:id="@+id/fragment_bottom"
         class="com.xuanvu.calendar.View.Fragment_Bottom"
         android:layout_width="match_parent"

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-        ButterKnife.bind( MainActivity.this );
+       /* ButterKnife.bind( MainActivity.this );*/
         /* Toolbar toolbar = findViewById( R.id.toolbar );
          */
         /*TextView tv_date = findViewById( R.id.tv_date );
