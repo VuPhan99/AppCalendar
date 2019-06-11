@@ -12,15 +12,15 @@
 
     <fragment
         android:id="@+id/fragment_top"
-        class="com.xuanvu.calendar.View.Fragment_Top"
+        class="com.xuanvu.calendar.View.FragmentTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_top" />
 
     <fragment
-        android:id="@+id/fragment_bottom"
-        class="com.xuanvu.calendar.View.Fragment_Bottom"
+        android:id="@+id/fragment_content"
+        class="com.xuanvu.calendar.View.FragmentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout="@layout/fragment_bottom" />
+        tools:layout="@layout/fragment_content" />
 </LinearLayout>

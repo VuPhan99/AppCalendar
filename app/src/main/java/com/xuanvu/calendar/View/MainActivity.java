@@ -3,6 +3,8 @@ package com.xuanvu.calendar.View;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -10,12 +12,11 @@ import android.widget.TextView;
 
 import com.xuanvu.calendar.R;
 
-import butterknife.ButterKnife;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tv_date;
-    private Button btn_sheetDialogl;
+    private Button btn_month, btn_week, btn_day, btn_event;
+    private FragmentManager frmManager;
 
 /*    @BindView( R.id.btnBottomSheet )
     Button btnBottomSheet;
@@ -29,22 +30,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-       /* ButterKnife.bind( MainActivity.this );*/
-        /* Toolbar toolbar = findViewById( R.id.toolbar );
-         */
-        /*TextView tv_date = findViewById( R.id.tv_date );
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE dd MMMM yyyy");*//*EEE MMM d yyyy*//*
-        String currentDateandTime = sdf.format(new Date());
-        tv_date.setText(currentDateandTime);*/
-        /*      tv_date.append( calendar.getTime()+"" );*//*
-        tv_date.append( calendar.get( Calendar.DATE ) + "" );
-        tv_date.append( calendar.get( Calendar.MONTH ) + "" );
-        tv_date.append( calendar.get( Calendar.DAY_OF_WEEK_IN_MONTH )+"" );
-        tv_date.append( calendar.get( Calendar.MONTH )+"" );*//*
-         */
-        /*setSupportActionBar( toolbar );
-         */
+        btn_month = findViewById( R.id.btn_month );
+        btn_week = findViewById( R.id.btn_week );
+        btn_day = findViewById( R.id.btn_day );
+        btn_event = findViewById( R.id.btn_event );
+
+        btn_month.setOnClickListener( this );
+        btn_week.setOnClickListener( this );
+        btn_day.setOnClickListener( this );
+        btn_event.setOnClickListener( this );
+
+        frmManager = getSupportFragmentManager();
+
+        FragmentTransaction frmTransaction = frmManager.beginTransaction();
+
+        frmTransaction.add( R.id.fragment_content, new FragmentMonth(), null );
+        frmTransaction.commit();
+
         FloatingActionButton fab = findViewById( R.id.fab );
         fab.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -53,6 +55,48 @@ public class MainActivity extends AppCompatActivity {
             }
         } );
 
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_month:
+                FragmentTransaction frmTransactionMonth = frmManager.beginTransaction();
+                frmTransactionMonth.replace( R.id.fragment_content, new FragmentMonth(), null );
+                frmTransactionMonth.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
+                frmTransactionMonth.addToBackStack( null );
+                frmTransactionMonth.commit();
+                break;
+            case R.id.btn_week:
+                FragmentTransaction frmTransactionWeek = frmManager.beginTransaction();
+                frmTransactionWeek.replace( R.id.fragment_content, new FragmentWeek(), null );
+                frmTransactionWeek.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
+                frmTransactionWeek.addToBackStack( null );
+                frmTransactionWeek.commit();
+                break;
+            case R.id.btn_day:
+                FragmentTransaction frmTransactionDay = frmManager.beginTransaction();
+                frmTransactionDay.replace( R.id.fragment_content, new FragmentDay(), null );
+                frmTransactionDay.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
+                frmTransactionDay.addToBackStack( null );
+                frmTransactionDay.commit();
+                break;
+           /* case R.id.btn_event:
+                FragmentTransaction frmTransactionEvent = frmManager.beginTransaction();
+                frmTransactionEvent.replace( R.id.btn_event, new FragmentEvent(), null );
+                frmTransactionEvent.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
+                frmTransactionEvent.addToBackStack( null );
+                frmTransactionEvent.commit();
+                break;*/
+            case R.id.btn_event:
+                FragmentTransaction frmTransactionEvent = frmManager.beginTransaction();
+                frmTransactionEvent.replace( R.id.fragment_content, new FragmentEvent(), null );
+                frmTransactionEvent.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
+                frmTransactionEvent.addToBackStack( null );
+                frmTransactionEvent.commit();
+                break;
+        }
 
     }
 
