@@ -1,5 +1,6 @@
 package com.xuanvu.calendar.View;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,8 @@ import com.xuanvu.calendar.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import static android.support.v7.widget.AppCompatDrawableManager.get;
 
 public class FragmentTop extends Fragment {
 
@@ -60,6 +63,8 @@ public class FragmentTop extends Fragment {
         } );
 
         Calendar calendar = Calendar.getInstance();
+//        new DatePickerDialog(getActivity(),(DatePickerDialog.OnDateSetListener) getActivity(),calendar.get( Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+
         SimpleDateFormat sdf = new SimpleDateFormat( "EEE dd MMMM yyyy" );/*EEE MMM d yyyy*/
         String currentDateandTime = sdf.format( new Date() );
         tv_date.setText( currentDateandTime );
