@@ -1,6 +1,5 @@
 package com.xuanvu.calendar.View;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,8 +17,6 @@ import com.xuanvu.calendar.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import static android.support.v7.widget.AppCompatDrawableManager.get;
 
 public class FragmentTop extends Fragment {
 
@@ -45,6 +42,7 @@ public class FragmentTop extends Fragment {
 
         btn_change_day.setVisibility( View.GONE );
         btn_setting.setVisibility( View.GONE );
+
 
         Button btn_top_detail = view.findViewById( R.id.btn_top_detail );
         btn_top_detail.setOnClickListener( new View.OnClickListener() {

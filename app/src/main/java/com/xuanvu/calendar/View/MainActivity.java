@@ -9,11 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.xuanvu.calendar.R;
+
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    CompactCalendarView compactCalendarView;
     private TextView tv_date;
     private Button btn_month, btn_week, btn_day, btn_event;
     private FragmentManager frmManager;
@@ -35,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_day = findViewById( R.id.btn_day );
         btn_event = findViewById( R.id.btn_event );
 
+        /*compactCalendarView = findViewById( R.id.compactcalendar_view );*/
+
+
         btn_month.setOnClickListener( this );
         btn_week.setOnClickListener( this );
         btn_day.setOnClickListener( this );
@@ -54,6 +62,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_LONG ).setAction( "Action", null ).show();
             }
         } );
+
+       /* compactCalendarView.setListener( new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                Toast.makeText( MainActivity.this, "Day" + dateClicked.toString(), Toast.LENGTH_SHORT ).show();
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+
+            }
+        } );*/
 
 
     }
@@ -82,13 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 frmTransactionDay.addToBackStack( null );
                 frmTransactionDay.commit();
                 break;
-           /* case R.id.btn_event:
-                FragmentTransaction frmTransactionEvent = frmManager.beginTransaction();
-                frmTransactionEvent.replace( R.id.btn_event, new FragmentEvent(), null );
-                frmTransactionEvent.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
-                frmTransactionEvent.addToBackStack( null );
-                frmTransactionEvent.commit();
-                break;*/
             case R.id.btn_event:
                 FragmentTransaction frmTransactionEvent = frmManager.beginTransaction();
                 frmTransactionEvent.replace( R.id.fragment_content, new FragmentEvent(), null );
