@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+<!--    <TextView
+        android:id="@+id/txtDateSelect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"/>-->
     <com.github.sundeepk.compactcalendarview.CompactCalendarView
         android:id="@+id/compactcalendar_view"
         android:layout_width="match_parent"
@@ -15,6 +19,7 @@
         app:compactCalendarBackgroundColor="#fff"
         app:compactCalendarCurrentDayBackgroundColor="#1a8cd7"
         app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+
         app:compactCalendarTextSize="12sp" />
 
     <TextView

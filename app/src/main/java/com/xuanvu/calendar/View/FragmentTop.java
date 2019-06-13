@@ -9,18 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.xuanvu.calendar.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 public class FragmentTop extends Fragment {
 
-    private TextView tv_date;
+    /*  private TextView tv_date;*/
     private ToggleButton toggleButton;
     private LinearLayout layout_detail_view;
     private Button btn_change_day, btn_setting;
@@ -31,7 +26,7 @@ public class FragmentTop extends Fragment {
         super.onCreateView( inflater, container, savedInstanceState );
         View view = inflater.inflate( R.layout.fragment_top, container, false );
 
-        TextView tv_date = view.findViewById( R.id.tv_date );
+        /* TextView tv_date = view.findViewById( R.id.tv_date );*/
 
         layout_detail_view = view.findViewById( R.id.layout_detail_view );
 
@@ -60,12 +55,11 @@ public class FragmentTop extends Fragment {
             }
         } );
 
-        Calendar calendar = Calendar.getInstance();
+       /* Calendar calendar = Calendar.getInstance();
 //        new DatePickerDialog(getActivity(),(DatePickerDialog.OnDateSetListener) getActivity(),calendar.get( Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
-
-        SimpleDateFormat sdf = new SimpleDateFormat( "EEE dd MMMM yyyy" );/*EEE MMM d yyyy*/
+        SimpleDateFormat sdf = new SimpleDateFormat( "EEE dd MMMM yyyy" );*//*EEE MMM d yyyy*//*
         String currentDateandTime = sdf.format( new Date() );
-        tv_date.setText( currentDateandTime );
+        tv_date.setText( currentDateandTime );*/
 
         return view;
     }

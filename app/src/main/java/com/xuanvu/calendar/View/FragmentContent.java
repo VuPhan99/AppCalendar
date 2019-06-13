@@ -12,11 +12,14 @@ import com.xuanvu.calendar.R;
 
 public class FragmentContent extends Fragment {
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView( inflater, container, savedInstanceState );
         View view = inflater.inflate( R.layout.fragment_content, container, false );
+
+
         return view;
     }
 

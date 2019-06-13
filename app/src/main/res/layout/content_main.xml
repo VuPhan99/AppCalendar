@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_top" />
 
+
     <fragment
         android:id="@+id/fragment_content"
         class="com.xuanvu.calendar.View.FragmentContent"
