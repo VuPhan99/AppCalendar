@@ -13,12 +13,13 @@ import android.widget.ToggleButton;
 
 import com.xuanvu.calendar.R;
 
-public class FragmentTop extends Fragment {
+public class FragmentTop extends Fragment implements View.OnClickListener {
 
     /*  private TextView tv_date;*/
     private ToggleButton toggleButton;
     private LinearLayout layout_detail_view;
-    private Button btn_change_day, btn_setting;
+    private Button btn_change_day;
+    private Button btn_setting;
 
     @Nullable
     @Override
@@ -37,6 +38,9 @@ public class FragmentTop extends Fragment {
 
         btn_change_day.setVisibility( View.GONE );
         btn_setting.setVisibility( View.GONE );
+
+        btn_change_day.setOnClickListener( this );
+        btn_setting.setOnClickListener( this );
 
 
         Button btn_top_detail = view.findViewById( R.id.btn_top_detail );
@@ -63,6 +67,17 @@ public class FragmentTop extends Fragment {
 
         return view;
     }
+    @Override
+    public void onClick(View v) {
+        switch (getId()){
+            case R.id.btn_change_day:
+
+                break;
+            case R.id.btn_setting:
+                break;
+        }
+
+    }
 
     @Override
     public void onStart() {
@@ -88,5 +103,6 @@ public class FragmentTop extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
+
 
 }

@@ -27,9 +27,9 @@
                 android:textStyle="bold" />
 
             <ToggleButton
-
+                android:layout_marginLeft="20dp"
                 android:id="@+id/btn_top_detail"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/ic_arrow_drop_down_black_24dp"
                 android:textOff=""

@@ -118,7 +118,6 @@ public class FragmentWeek extends Fragment implements WeekView.EventClickListene
         @Override
         public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
             // Populate the week view with some events.
-
             List<WeekViewEvent> events = new ArrayList<>();
             Calendar startTime = (Calendar) clickedTime.clone();
             startTime.set( Calendar.MINUTE, 0 );
