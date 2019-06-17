@@ -5,21 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.xuanvu.calendar.R;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     CompactCalendarView compactCalendarView;
     private TextView tv_date;
@@ -27,50 +30,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_week;
     private Button btn_day;
     private Button btn_event;
-    private Button btn_change_day;
-    private Button btn_setting;
     private FragmentManager frmManager;
 
-
     @BindView(R.id.btn_change_day)
-    Button btnBottomSheet;
-
-/*
-    @BindView(R.id.bottom_sheet_cay)
-    LinearLayout layoutBottomSheet;
-
-    BottomSheetBehavior sheetBehavior;
-*/
-
+    Button btn_chang_day;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
+
+        ButterKnife.bind( this );
+
         btn_month = findViewById( R.id.btn_month );
         btn_week = findViewById( R.id.btn_week );
         btn_day = findViewById( R.id.btn_day );
         btn_event = findViewById( R.id.btn_event );
-        btn_change_day = findViewById( R.id.btn_change_day );
-        btn_setting = findViewById( R.id.btn_setting );
 
         btn_month.setOnClickListener( this );
         btn_week.setOnClickListener( this );
         btn_day.setOnClickListener( this );
         btn_event.setOnClickListener( this );
-       /* btn_change_day.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    sheetBehavior.setState( BottomSheetBehavior.STATE_EXPANDED );
-                    btnBottomSheet.setText( "Close sheet" );
-                } else {
-                    sheetBehavior.setState( BottomSheetBehavior.STATE_COLLAPSED );
-                    btnBottomSheet.setText( "Expand sheet" );
-                }
-            }
-        } );*/
-
+        btn_chang_day.setOnClickListener( this );
 
         frmManager = getSupportFragmentManager();
         FragmentTransaction frmTransaction = frmManager.beginTransaction();
@@ -86,36 +67,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 /*Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_LONG ).setAction( "Action", null ).show();*/
             }
         } );
-        /*ButterKnife.bind( this );*/
-        /*sheetBehavior = BottomSheetBehavior.from( layoutBottomSheet );
 
-        sheetBehavior.setBottomSheetCallback( new BottomSheetBehavior.BottomSheetCallback() {
+        //Find bottom Sheet ID
+        View bottomSheet = findViewById( R.id.bottom_sheet );
+        mBottomSheetBehavior = BottomSheetBehavior.from( bottomSheet );
+
+        //By default set BottomSheet Behavior as Collapsed and Height 0
+        mBottomSheetBehavior.setState( BottomSheetBehavior.STATE_COLLAPSED );
+        mBottomSheetBehavior.setPeekHeight( 0 );
+
+        //If you want to handle callback of Sheet Behavior you can use below code
+        mBottomSheetBehavior.setBottomSheetCallback( new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN:
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.d( TAG, "State Collapsed" );
                         break;
-                    case BottomSheetBehavior.STATE_EXPANDED: {
-                        btnBottomSheet.setText( "Close Sheet" );
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_COLLAPSED: {
-                        btnBottomSheet.setText( "Expand Sheet" );
-                    }
-                    break;
                     case BottomSheetBehavior.STATE_DRAGGING:
+                        Log.d( TAG, "State Dragging" );
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Log.d( TAG, "State Expanded" );
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        Log.d( TAG, "State Hidden" );
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:
+                        Log.d( TAG, "State Settling" );
                         break;
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
             }
         } );
-*/
+
     }
 
     @Override
@@ -148,6 +136,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 frmTransactionEvent.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN );
                 frmTransactionEvent.addToBackStack( null );
                 frmTransactionEvent.commit();
+                break;
+            case R.id.btn_change_day:
+                //Check the current state of bottom sheet
+                /*if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    //If state is in collapse mode expand it
+                    mBottomSheetBehavior.setState( BottomSheetBehavior.STATE_EXPANDED );
+                else
+                    //else if state is expanded collapse it
+                    mBottomSheetBehavior.setState( BottomSheetBehavior.STATE_COLLAPSED );*/
+
+                BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+                bottomSheetFragment.show( getSupportFragmentManager(), bottomSheetFragment.getTag() );
                 break;
         }
 

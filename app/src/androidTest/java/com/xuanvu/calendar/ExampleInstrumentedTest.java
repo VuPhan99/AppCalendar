@@ -1,26 +1,24 @@
-package com.xuanvu.calendar;
+package com.xuanvu.calendar.View;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.xuanvu.calendar.R;
 
-import static org.junit.Assert.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-@RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+import butterknife.BindView;
 
-        assertEquals( "com.xuanvu.calendar", appContext.getPackageName() );
-    }
-}
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    CompactCalendarView
