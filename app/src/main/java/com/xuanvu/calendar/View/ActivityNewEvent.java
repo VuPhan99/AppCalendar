@@ -1,17 +1,22 @@
 package com.xuanvu.calendar.View;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.xuanvu.calendar.Database.MyDatabase;
 import com.xuanvu.calendar.R;
 
 import java.text.DateFormat;
@@ -20,24 +25,38 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.BindView;
+
 public class ActivityNewEvent extends AppCompatActivity implements View.OnClickListener {
 
     private DatePickerDialog datePicker;
     private TimePickerDialog timePickerDialog;
-    private TextView tv_date_from;
-    private TextView tv_date_to;
+/*    private TextView tv_date_from;
+    private TextView tv_date_to;*/
     private TextView tv_time;
     private DateFormat dateFormatForNormal;
     private DateFormat dateFormatForTime;
     private Switch btn_fulltime;
     private Button btn_back;
     private Button btn_save;
+    private MyDatabase myDatabase;
+    private Calendar calendar;
 
     final int[] hour1 = new int[1];
     final int[] minutes1 = new int[1];
     final int[] cYear = new int[1];
     final int[] cMonth = new int[1];
     final int[] cDay = new int[1];
+
+    @BindView( R.id.edt_Title )
+    EditText edt_title;
+    @BindView( R.id.edt_Content )
+    EditText edt_content;
+    @BindView( R.id.tv_date_from )
+    TextView tv_date_from;
+    @BindView( R.id.edt_Content )
+    TextView tv_date_to;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +91,27 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
         cMonth[0] = getDate.get( Calendar.MONTH );
         cYear[0] = getDate.get( Calendar.YEAR );
 
+        saveEvent();
 
+
+    }
+
+    private void saveEvent() {
+        /*Intent intent = new Intent( this, MainActivity.class );
+        if (edt_title.getText().toString().equals( "" ) && edt_content.getText().toString().equals( "" )) {
+            intent.putExtra( "MESSAGE", false );
+            setResult( Activity.RESULT_CANCELED, intent );
+            finishActivity( 200 );
+        } else {
+//            currentTime = Calendar.getInstance().getTime();
+            Calendar noteObjForUpdate = new Calendar( edt_title.getText().toString(), edt_content.getText().toString(),tv_date_from.getText().toString() );
+            myDatabase.updateCalendar( noteObjForUpdate, calendar.getID() );
+            Toast.makeText( this, "Saved your note", Toast.LENGTH_SHORT ).show();
+            intent.putExtra( "MESSAGE", true );
+            setResult( Activity.RESULT_OK, intent );
+//            finish();
+            finishActivity( 200 );
+        }*/
     }
 
     @Override

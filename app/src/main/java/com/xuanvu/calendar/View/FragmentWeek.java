@@ -1,5 +1,6 @@
 package com.xuanvu.calendar.View;
 
+import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
@@ -21,7 +23,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class FragmentWeek extends Fragment implements WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
+public class FragmentWeek extends Fragment implements WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewClickListener {
     private WeekView mWeekView;
     private Calendar clickedTime;
 
@@ -38,7 +40,7 @@ public class FragmentWeek extends Fragment implements WeekView.EventClickListene
         mWeekView.setOnEventClickListener( this );
         mWeekView.setMonthChangeListener( mMonthChangeListener );
         mWeekView.setEventLongPressListener( this );
-        mWeekView.setEmptyViewLongPressListener( this );
+        mWeekView.setEmptyViewClickListener( this );
 
         clickedTime = Calendar.getInstance();
 
@@ -94,18 +96,26 @@ public class FragmentWeek extends Fragment implements WeekView.EventClickListene
     /*
      * Handle Event Weekly
      * */
+    protected String getEventTitle(Calendar time) {
+        return String.format( "Event of %02d:%02d %s/%d", time.get( Calendar.HOUR_OF_DAY ), time.get( Calendar.MINUTE ), time.get( Calendar.MONTH ) + 1, time.get( Calendar.DAY_OF_MONTH ) );
+    }
+
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        Intent intent = new Intent( getActivity(), ActivityNewEvent.class );
+        startActivity( intent );
 
+        Toast.makeText( getActivity(), "Clicked " + event.getName(), Toast.LENGTH_SHORT ).show();
     }
 
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-
     }
 
     @Override
-    public void onEmptyViewLongPress(Calendar time) {
+    public void onEmptyViewClicked(Calendar time) {
+        Intent intent = new Intent( getActivity(), ActivityNewEvent.class );
+        startActivity( intent );
 
     }
 
@@ -129,7 +139,10 @@ public class FragmentWeek extends Fragment implements WeekView.EventClickListene
             //event.setColor(getResources().getColor(R.color.event_color_02));
             events.add( event );
             return events;
+
+
         }
     };
+
 
 }
