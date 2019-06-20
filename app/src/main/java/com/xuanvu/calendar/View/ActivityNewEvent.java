@@ -1,12 +1,12 @@
 package com.xuanvu.calendar.View;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -16,14 +16,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.alamkanak.weekview.WeekViewEvent;
 import com.xuanvu.calendar.Database.MyDatabase;
 import com.xuanvu.calendar.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 import butterknife.BindView;
 
@@ -31,8 +35,8 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
 
     private DatePickerDialog datePicker;
     private TimePickerDialog timePickerDialog;
-/*    private TextView tv_date_from;
-    private TextView tv_date_to;*/
+    private TextView tv_date_from;
+    private TextView tv_date_to;
     private TextView tv_time;
     private DateFormat dateFormatForNormal;
     private DateFormat dateFormatForTime;
@@ -42,32 +46,39 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
     private MyDatabase myDatabase;
     private Calendar calendar;
 
-    final int[] hour1 = new int[1];
-    final int[] minutes1 = new int[1];
-    final int[] cYear = new int[1];
-    final int[] cMonth = new int[1];
-    final int[] cDay = new int[1];
+    int hourTimePicker;
+    int minutesTimePicker;
+    int dayDatePicker;
+    int monthDatePicker;
+    int monthDatePicker2;
+    int yearDatePicker;
 
-    @BindView( R.id.edt_Title )
+    private Calendar clickedTime;
+    private int newYear;
+    private int newMonth;
+
+    /*  private int hourOfDay;*/
+    private int minute;
+
+
+    @BindView(R.id.edt_Title)
     EditText edt_title;
-    @BindView( R.id.edt_Content )
+    @BindView(R.id.edt_Content)
     EditText edt_content;
-    @BindView( R.id.tv_date_from )
-    TextView tv_date_from;
-    @BindView( R.id.edt_Content )
-    TextView tv_date_to;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_new_event );
+        edt_title = findViewById( R.id.edt_Title );
+        edt_content = findViewById( R.id.edt_Content );
         tv_date_from = findViewById( R.id.tv_date_from );
         tv_date_to = findViewById( R.id.tv_date_to );
         /* tv_time = findViewById( R.id.tv_time );*/
         btn_fulltime = findViewById( R.id.btn_fulltime );
         btn_back = findViewById( R.id.btn_back );
         btn_save = findViewById( R.id.btn_save );
+        tv_date_from = findViewById( R.id.tv_date_from );
 
         dateFormatForTime = new SimpleDateFormat( "EEE dd MMM yyyy ", Locale.getDefault() );
         dateFormatForNormal = new SimpleDateFormat( "hh:mm EEE dd MMM yyyy ", Locale.getDefault() );
@@ -77,7 +88,10 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
         tv_date_from.setText( currentDateandTime );
         tv_date_to.setText( currentDateandTime );
         /*    tv_time.setText( cureentTime );*/
-
+        //init database
+        myDatabase = new MyDatabase( this );
+        newYear = 0;
+        newMonth = 0;
 
         tv_date_from.setOnClickListener( this );
         tv_date_to.setOnClickListener( this );
@@ -87,31 +101,96 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
         btn_save.setOnClickListener( this );
 
         Calendar getDate = Calendar.getInstance();
-        cDay[0] = getDate.get( Calendar.DAY_OF_MONTH );
-        cMonth[0] = getDate.get( Calendar.MONTH );
-        cYear[0] = getDate.get( Calendar.YEAR );
+        dayDatePicker = getDate.get( Calendar.DAY_OF_MONTH );
+        monthDatePicker = getDate.get( Calendar.MONTH );
+        yearDatePicker = getDate.get( Calendar.YEAR );
+//        Log.d( "debug_xv_first_time", String.valueOf( hourTimePicker + ": " + minutesTimePicker + " - " + dayDatePicker + "/" + monthDatePicker + "/" + yearDatePicker ) );
 
-        saveEvent();
+//        saveEvent();
 
 
     }
 
     private void saveEvent() {
-        /*Intent intent = new Intent( this, MainActivity.class );
-        if (edt_title.getText().toString().equals( "" ) && edt_content.getText().toString().equals( "" )) {
+        Intent intent = new Intent( this, MainActivity.class );
+        /*if (edt_title.getText().toString().equals( "" ) && edt_content.getText().toString().equals( "" )) {
             intent.putExtra( "MESSAGE", false );
             setResult( Activity.RESULT_CANCELED, intent );
-            finishActivity( 200 );
+            finishActivity( 200 );*/
+        /* } else {*/
+        clickedTime = Calendar.getInstance();
+        List<WeekViewEvent> events = new ArrayList<>();
+        Calendar startTime = (Calendar) clickedTime.clone();
+        startTime.set( Calendar.MINUTE, 0 );
+        startTime.set( Calendar.MONTH, newMonth );
+        startTime.set( Calendar.YEAR, newYear );
+        Calendar endTime = (Calendar) startTime.clone();
+        endTime.add( Calendar.HOUR, 1 );
+/*
+        com.xuanvu.calendar.Model.Calendar calendar = new com.xuanvu.calendar.Model.Calendar();
+        calendar.setmTitle( edt_title.getText().toString() );
+        calendar.setmContent( edt_content.getText().toString() );
+
+        calendar.setmStartTimeNewHour( Calendar.HOUR );
+        calendar.setmStartTimeNewMinute( Calendar.MINUTE );
+        calendar.setmStartTimeNewDay( Calendar.DAY_OF_MONTH );
+        calendar.setmStartTimeNewMonth( newMonth );
+        calendar.setmStartTimeNewYear( newYear );
+
+        calendar.setmEndTimeNewHour( Calendar.HOUR );
+        calendar.setmEndTimeNewMinute( Calendar.MINUTE );
+        calendar.setmEndTimeNewDay( Calendar.DAY_OF_MONTH );
+        calendar.setmEndTimeNewMonth( newMonth );
+        calendar.setmEndTimeNewYear( newYear );
+
+        myDatabase.addCalendar( calendar );
+        int idEvent = myDatabase.getLastedIdInsert();*/
+
+//     /*   myDatabase.addCalendar( startTime );*/
+//        WeekViewEvent event = new WeekViewEvent( 1, "new eventttttt", startTime, endTime );
+//        //event.setColor(getResources().getColor(R.color.event_color_02));
+//        events.add( event );
+
+        /*intent.putExtra( "DATA_WEEK_EVENT", true );
+        intent.putExtra( "DATA_ID_EVENT", idEvent );
+        setResult( Activity.RESULT_OK, intent );
+        finish();*/
+        String from = tv_date_from.getText().toString();
+        String to = tv_date_to.getText().toString();
+
+        com.xuanvu.calendar.Model.Calendar calendar = new com.xuanvu.calendar.Model.Calendar();
+        calendar.setmTitle( edt_title.getText().toString() );
+        calendar.setmContent( edt_content.getText().toString() );
+
+        calendar.setmStartTimeNewHour( Integer.parseInt( from.substring( 0, 2 ) ) );
+        calendar.setmStartTimeNewMinute( Integer.parseInt( from.substring( 3, 5 ) ) );
+        calendar.setmStartTimeNewDay( Integer.parseInt( from.substring( 9, 11 ) ) );
+        calendar.setmStartTimeNewMonth( Integer.parseInt( from.substring( 12, 14 ) ) );
+        calendar.setmStartTimeNewYear( Integer.parseInt( from.substring( 15,19 )));
+
+        calendar.setmEndTimeNewHour( Integer.parseInt( to.substring( 0, 2 ) ) );
+        calendar.setmEndTimeNewMinute( Integer.parseInt( to.substring( 3, 5 ) ) );
+        calendar.setmEndTimeNewDay( Integer.parseInt( to.substring( 9, 11 ) ) );
+        calendar.setmEndTimeNewMonth( Integer.parseInt( to.substring( 12, 14 ) ) );
+        calendar.setmEndTimeNewYear( Integer.parseInt( to.substring( 15,19 )));
+
+
+    /*    Log.d( "month",   sa.substring( 12 ,14) );
+        Log.d( "year",   sa.substring( 15 ,19) );*/
+
+        if (myDatabase.addCalendar( calendar ) != 0) {
+            Intent intentSendBack = new Intent( ActivityNewEvent.this, FragmentWeek.class );
+            intentSendBack.putExtra( "DATA_WEEK_EVENT", calendar );
+            setResult( FragmentWeek.RESULT_CODE_ADD, intentSendBack );
+            finish();
         } else {
-//            currentTime = Calendar.getInstance().getTime();
-            Calendar noteObjForUpdate = new Calendar( edt_title.getText().toString(), edt_content.getText().toString(),tv_date_from.getText().toString() );
-            myDatabase.updateCalendar( noteObjForUpdate, calendar.getID() );
-            Toast.makeText( this, "Saved your note", Toast.LENGTH_SHORT ).show();
-            intent.putExtra( "MESSAGE", true );
-            setResult( Activity.RESULT_OK, intent );
-//            finish();
-            finishActivity( 200 );
-        }*/
+            Toast.makeText( ActivityNewEvent.this, " FAILE", Toast.LENGTH_SHORT ).show();
+
+        }
+
+
+//    }
+
     }
 
     @Override
@@ -138,7 +217,7 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
                         final String AM_PM;
 
                         if (hourOfDay > 12) {
-                            hourOfDay -= 12;
+                            hourOfDay = hourOfDay;
                             AM_PM = "PM";
                         } else if (hourOfDay == 0) {
                             hourOfDay += 12;
@@ -147,25 +226,26 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
                         else AM_PM = "AM";
 
 
-                        hour1[0] = hourOfDay;
-                        minutes1[0] = minute;
+                        hourTimePicker = hourOfDay;
+                        minutesTimePicker = minute;
 
                         datePicker = new DatePickerDialog( ActivityNewEvent.this, new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                yearDatePicker = year;
+                                monthDatePicker = month;
+                                monthDatePicker2 = month + 1 ;
+                                dayDatePicker = dayOfMonth;
 
-                                cYear[0] = year;
-                                cMonth[0] = month;
-                                cDay[0] = dayOfMonth;
-
-                                tv_date_from.setText( String.format( "%02d:%02d", hour1[0], minutes1[0] ) + AM_PM + "  " + cDay[0] + "/" + cMonth[0] + "/" + cYear[0] );
+                                tv_date_from.setText( String.format( "%02d:%02d", hourTimePicker, minutesTimePicker ) + AM_PM + "  " + dayDatePicker + "/"  +String.format( "%02d", monthDatePicker2 )+ "/" + yearDatePicker );
+                                Log.d( "debug_xv_sm-date", "hours: " + hourTimePicker + " - minute: " + minutesTimePicker + " - day: " + dayDatePicker + " - month: " + String.format( "%02d", monthDatePicker2 )+ " - year: " + yearDatePicker );
 
                             }
-                        }, cYear[0], cMonth[0], cDay[0] );
+                        }, yearDatePicker, monthDatePicker, dayDatePicker );
 
                         datePicker.show();
                     }
-                }, hour1[0], minutes1[00], false );
+                }, hourTimePicker, minutesTimePicker, false );
 
                 timePickerDialog.show();
                 break;
@@ -190,7 +270,7 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
                         final String AM_PM;
 
                         if (hourOfDay > 12) {
-                            hourOfDay -= 12;
+                            hourOfDay = hourOfDay;
                             AM_PM = "PM";
                         } else if (hourOfDay == 0) {
                             hourOfDay += 12;
@@ -199,28 +279,28 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
                         else AM_PM = "AM";
 
 
-                        hour1[0] = hourOfDay;
-                        minutes1[0] = minute;
+                        hourTimePicker = hourOfDay;
+                        minutesTimePicker = minute;
 
-                        DatePickerDialog datePicker = new DatePickerDialog( ActivityNewEvent.this, new DatePickerDialog.OnDateSetListener() {
+                        datePicker = new DatePickerDialog( ActivityNewEvent.this, new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                yearDatePicker = year;
+                                monthDatePicker = month;
+                                monthDatePicker2 = month + 1 ;
+                                dayDatePicker = dayOfMonth;
 
-                                cYear[0] = year;
-                                cMonth[0] = month;
-                                cDay[0] = dayOfMonth;
-
-                                tv_date_to.setText( String.format( "%02d:%02d", hour1[0], minutes1[0] ) + AM_PM + "  " + cDay[0] + "/" + cMonth[0] + "/" + cYear[0] );
+                                tv_date_to.setText( String.format( "%02d:%02d", hourTimePicker, minutesTimePicker ) + AM_PM + "  " + dayDatePicker + "/"  +String.format( "%02d", monthDatePicker2 )+ "/" + yearDatePicker );
+                                Log.d( "debug_xv_sm-date", "hours: " + hourTimePicker + " - minute: " + minutesTimePicker + " - day: " + dayDatePicker + " - month: " + String.format( "%02d", monthDatePicker2 )+ " - year: " + yearDatePicker );
 
                             }
-                        }, cYear[0], cMonth[0], cDay[0] );
+                        }, yearDatePicker, monthDatePicker, dayDatePicker );
 
                         datePicker.show();
                     }
-                }, hour1[0], minutes1[00], false );
+                }, hourTimePicker, minutesTimePicker, false );
 
                 timePickerDialog.show();
-
                 break;
 
      /*       case R.id.tv_time:
@@ -234,7 +314,6 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
                     }
                 }, hour, minute, false );
                 timePickerDialog.show();
-
                 break;*/
 
             case R.id.btn_fulltime:
@@ -252,7 +331,7 @@ public class ActivityNewEvent extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 break;
             case R.id.btn_save:
-                onBackPressed();
+                saveEvent();
                 break;
 
         }

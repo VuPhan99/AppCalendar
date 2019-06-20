@@ -1,7 +1,11 @@
 package com.xuanvu.calendar.View;
 
+import android.content.ActivityNotFoundException;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -12,9 +16,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.xuanvu.calendar.R;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,9 +39,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_day;
     private Button btn_event;
     private FragmentManager frmManager;
+    long mCalendarId;
 
     @BindView(R.id.btn_change_day)
     Button btn_chang_day;
+    @BindView( R.id.btn_setting )
+    Button btn_setting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_day.setOnClickListener( this );
         btn_event.setOnClickListener( this );
         btn_chang_day.setOnClickListener( this );
+        btn_setting.setOnClickListener( this );
 
         frmManager = getSupportFragmentManager();
         FragmentTransaction frmTransaction = frmManager.beginTransaction();
@@ -62,8 +74,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fab.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText( getApplicationContext(), "Clicked on Mainactivity", Toast.LENGTH_SHORT ).show();
                 Intent intent = new Intent( MainActivity.this, ActivityNewEvent.class );
                 startActivity( intent );
+
+               /* Calendar cal = GregorianCalendar.getInstance();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, cal.getTimeInMillis());
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(builder.build());
+                startActivity(intent);*/
+
                 /*Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_LONG ).setAction( "Action", null ).show();*/
             }
         } );
@@ -149,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
                 bottomSheetFragment.show( getSupportFragmentManager(), bottomSheetFragment.getTag() );
                 break;
+            case R.id.btn_setting:
+                Intent intent = new Intent( this, ActivitySetting.class );
+                startActivity( intent );
         }
 
     }

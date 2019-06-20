@@ -1,5 +1,6 @@
 package com.xuanvu.calendar.View;
 
+import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class FragmentDay extends Fragment implements WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener, View.OnClickListener {
+public class FragmentDay extends Fragment implements WeekView.EventClickListener, WeekView.EmptyViewLongPressListener, WeekView.EmptyViewClickListener, View.OnClickListener {
 
     private WeekView mDayView;
     private Calendar clickedTime;
@@ -34,17 +35,17 @@ public class FragmentDay extends Fragment implements WeekView.EventClickListener
         mDayView = view.findViewById( R.id.dayView );
 
         mDayView.setOnClickListener( this );
-        mDayView.setMonthChangeListener(mDayChangeListener );
-        mDayView.setEventLongPressListener(this);
-        mDayView.setEmptyViewLongPressListener(this);
-        
+        mDayView.setMonthChangeListener( mDayChangeListener );
+        mDayView.setEmptyViewClickListener( this );
+        mDayView.setEmptyViewLongPressListener( this );
+
         clickedTime = Calendar.getInstance();
-        setupDateTimeInterpreter(false);
+        setupDateTimeInterpreter( false );
 
         return view;
     }
 
-    private void setupDateTimeInterpreter( final boolean shortDate) {
+    private void setupDateTimeInterpreter(final boolean shortDate) {
         mDayView.setDateTimeInterpreter( new DateTimeInterpreter() {
             @Override
             public String interpretDate(Calendar date) {
@@ -100,8 +101,9 @@ public class FragmentDay extends Fragment implements WeekView.EventClickListener
     }
 
     @Override
-    public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-
+    public void onEmptyViewClicked(Calendar time) {
+        Intent intent = new Intent( getActivity(), ActivityNewEvent.class );
+        startActivity( intent );
     }
 
     @Override
@@ -127,4 +129,6 @@ public class FragmentDay extends Fragment implements WeekView.EventClickListener
             return events;
         }
     };
+
+
 }

@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.ActivityNewEvent"></activity>
+        <activity android:name=".View.ActivitySetting"></activity>
         
     </application>
 
