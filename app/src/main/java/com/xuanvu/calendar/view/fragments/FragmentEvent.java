@@ -1,4 +1,4 @@
-package com.xuanvu.calendar.View;
+package com.xuanvu.calendar.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,28 +19,4 @@ public class FragmentEvent extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

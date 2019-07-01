@@ -10,17 +10,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".View.MainActivity"
+            android:name=".view.activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+<!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+-->
+        </activity>
+        <activity
+            android:name=".view.activities.SplashScreen"
+            android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.ActivityNewEvent"></activity>
-        <activity android:name=".View.ActivitySetting"></activity>
+        <activity android:name=".view.activities.newevent.ActivityNewEvent"></activity>
+        <activity android:name=".view.activities.setting.ActivitySetting"></activity>
+        <activity android:name=".view.activities.editevent.ActivityEditEvent"></activity>
         
     </application>
 

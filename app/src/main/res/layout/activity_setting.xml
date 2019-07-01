@@ -8,10 +8,10 @@
         android:id="@+id/btn_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/ic_black_24dp"/>
+        android:background="@drawable/ic_navigate_before_black_24dp"/>
     <Switch
         android:layout_marginTop="20dp"
-        android:id="@+id/switch_dark_theme"
+        android:id="@+id/nightmode"
         android:text="Use the dark theme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

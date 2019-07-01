@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="1dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".View.MainActivity"
+    tools:context=".view.activities.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <fragment
         android:id="@+id/fragment_top"
-        class="com.xuanvu.calendar.View.FragmentTop"
+        class="com.xuanvu.calendar.view.fragments.FragmentTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_top" />
@@ -20,66 +19,17 @@
 
     <fragment
         android:id="@+id/fragment_content"
-        class="com.xuanvu.calendar.View.FragmentContent"
+        class="com.xuanvu.calendar.view.fragments.FragmentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/fragment_top"
         tools:layout="@layout/fragment_content" />
-   <!-- <LinearLayout
-        android:id="@+id/layout_change_day"
-        android:layout_below="@id/fragment_content"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:orientation="horizontal"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginRight="32dp"
-                android:tint="#737373" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Preview"
-                android:textColor="#737373"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:orientation="horizontal"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginRight="32dp"
-                android:tint="#737373" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Share"
-                android:textColor="#737373"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-    </LinearLayout>-->
+        android:layout_height="match_parent"
+        android:layout_below="@id/fragment_content"
+        android:overScrollMode="ifContentScrolls" />
 
 </RelativeLayout>

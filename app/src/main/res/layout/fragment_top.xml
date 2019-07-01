@@ -2,10 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-
-    >
+    android:background="@color/backgroud_spflash"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/top_detail"
@@ -13,51 +11,58 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="46dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:paddingTop="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ToggleButton
-                android:layout_marginLeft="20dp"
                 android:id="@+id/btn_top_detail"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/tv_date"
                 android:background="@drawable/ic_arrow_drop_down_black_24dp"
                 android:textOff=""
                 android:textOn="" />
 
-            <Button
+            <ImageButton
+
                 android:id="@+id/btn_change_day"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/btn_setting"
+                android:layout_marginRight="12dp"
                 android:background="@null"
-                android:drawableRight="@drawable/ic_swap_horiz_black_24dp" />
+                android:src="@drawable/ic_swap_horiz_black_24dp" />
 
-            <Button
+            <ImageButton
+                android:layout_marginRight="10dp"
                 android:id="@+id/btn_setting"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
                 android:background="@null"
-                android:drawableRight="@drawable/ic_settings_black_24dp"
-                android:paddingRight="10dp" />
+                android:src="@drawable/ic_settings_black_24dp" />
 
-        </LinearLayout>
+
+        </RelativeLayout>
 
 
         <LinearLayout
             android:id="@+id/layout_detail_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
             android:orientation="horizontal"
             android:visibility="visible"
             android:weightSum="4">

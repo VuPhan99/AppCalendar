@@ -1,36 +1,56 @@
-package com.xuanvu.calendar.View;
+package com.xuanvu.calendar.view.activities.main;
 
-import android.content.ActivityNotFoundException;
-import android.content.ContentUris;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.xuanvu.calendar.R;
+import com.xuanvu.calendar.database.MyDatabase;
+import com.xuanvu.calendar.model.Event;
+import com.xuanvu.calendar.view.activities.editevent.ActivityEditEvent;
+import com.xuanvu.calendar.view.activities.newevent.ActivityNewEvent;
+import com.xuanvu.calendar.view.activities.setting.ActivitySetting;
+import com.xuanvu.calendar.view.adapter.EventAdapter;
+import com.xuanvu.calendar.view.fragments.BottomSheetFragment;
+import com.xuanvu.calendar.view.fragments.FragmentDay;
+import com.xuanvu.calendar.view.fragments.FragmentEvent;
+import com.xuanvu.calendar.view.fragments.FragmentMonth;
+import com.xuanvu.calendar.view.fragments.FragmentWeek;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, EventAdapter.OnClickItemListener {
+
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREF_DARK_THEME = "dark_theme";
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private BottomSheetBehavior mBottomSheetBehavior;
+    List<Event> listEvent;
+    EventAdapter eventAdapter;
+    RecyclerView mRecyclerView;
+    MyDatabase myDatabase;
+    public static final int RESULT_CODE_ADD = 100;
+    public static final int RESULT_CODE_EDIT = 200;
+    public static final int REQUEST_CODE = 10000;
 
     CompactCalendarView compactCalendarView;
     private TextView tv_date;
@@ -39,57 +59,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_day;
     private Button btn_event;
     private FragmentManager frmManager;
-    long mCalendarId;
 
     @BindView(R.id.btn_change_day)
-    Button btn_chang_day;
-    @BindView( R.id.btn_setting )
-    Button btn_setting;
+    ImageButton btn_chang_day;
+    @BindView(R.id.btn_setting)
+    ImageButton btn_setting;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-
         ButterKnife.bind( this );
-
-        btn_month = findViewById( R.id.btn_month );
-        btn_week = findViewById( R.id.btn_week );
-        btn_day = findViewById( R.id.btn_day );
-        btn_event = findViewById( R.id.btn_event );
-
-        btn_month.setOnClickListener( this );
-        btn_week.setOnClickListener( this );
-        btn_day.setOnClickListener( this );
-        btn_event.setOnClickListener( this );
-        btn_chang_day.setOnClickListener( this );
-        btn_setting.setOnClickListener( this );
-
-        frmManager = getSupportFragmentManager();
-        FragmentTransaction frmTransaction = frmManager.beginTransaction();
-        frmTransaction.add( R.id.fragment_content, new FragmentMonth(), null );
-        frmTransaction.commit();
 
         FloatingActionButton fab = findViewById( R.id.fab );
         fab.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText( getApplicationContext(), "Clicked on Mainactivity", Toast.LENGTH_SHORT ).show();
                 Intent intent = new Intent( MainActivity.this, ActivityNewEvent.class );
                 startActivity( intent );
-
-               /* Calendar cal = GregorianCalendar.getInstance();
-                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-                builder.appendPath("time");
-                ContentUris.appendId(builder, cal.getTimeInMillis());
-                Intent intent = new Intent(Intent.ACTION_VIEW)
-                        .setData(builder.build());
-                startActivity(intent);*/
-
-                /*Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_LONG ).setAction( "Action", null ).show();*/
             }
         } );
+        initFragmentContent();
+        bottomsheetdialog();
+        initView();
+        initCalendar();
+    }
 
+    private void initFragmentContent() {
+        frmManager = getSupportFragmentManager();
+        FragmentTransaction frmTransaction = frmManager.beginTransaction();
+        frmTransaction.add( R.id.fragment_content, new FragmentMonth(), null );
+        frmTransaction.commit();
+
+    }
+
+    private void bottomsheetdialog() {
         //Find bottom Sheet ID
         View bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from( bottomSheet );
@@ -125,7 +130,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         } );
+    }
 
+    private void initView() {
+        mRecyclerView = findViewById( R.id.mRecyclerView );
+        btn_month = findViewById( R.id.btn_month );
+        btn_week = findViewById( R.id.btn_week );
+        btn_day = findViewById( R.id.btn_day );
+        btn_event = findViewById( R.id.btn_event );
+        btn_month.setOnClickListener( this );
+        btn_week.setOnClickListener( this );
+        btn_day.setOnClickListener( this );
+        btn_event.setOnClickListener( this );
+        btn_chang_day.setOnClickListener( this );
+        btn_setting.setOnClickListener( this );
+    }
+
+    private void initCalendar() {
+
+        listEvent = new ArrayList<Event>();
+        myDatabase = new MyDatabase( this );
+        listEvent = myDatabase.getAllEvent();
+        eventAdapter = new EventAdapter( this, R.layout.item_event, listEvent, this );
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager( this );
+        mRecyclerView.setLayoutManager( layoutManager );
+        mRecyclerView.setAdapter( eventAdapter );
+        eventAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initCalendar();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult( requestCode, resultCode, data );
+
+        if (requestCode == RESULT_CODE_ADD) {
+            boolean resultCreate = data.getBooleanExtra( "NEW_DATA_EVENT", false );
+            if (resultCreate == true) {
+                listEvent.clear();
+                listEvent = myDatabase.getAllEvent();
+                initCalendar();
+            }
+            if (requestCode == RESULT_CODE_EDIT) {
+                if (data != null) {
+                    listEvent.clear();
+                    listEvent = myDatabase.getAllEvent();
+                    eventAdapter.notifyDataSetChanged();
+                    initCalendar();
+                }
+            }
+        }
     }
 
     @Override
@@ -160,43 +219,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 frmTransactionEvent.commit();
                 break;
             case R.id.btn_change_day:
-                //Check the current state of bottom sheet
-                /*if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
-                    //If state is in collapse mode expand it
-                    mBottomSheetBehavior.setState( BottomSheetBehavior.STATE_EXPANDED );
-                else
-                    //else if state is expanded collapse it
-                    mBottomSheetBehavior.setState( BottomSheetBehavior.STATE_COLLAPSED );*/
-
                 BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
                 bottomSheetFragment.show( getSupportFragmentManager(), bottomSheetFragment.getTag() );
                 break;
             case R.id.btn_setting:
                 Intent intent = new Intent( this, ActivitySetting.class );
                 startActivity( intent );
+                break;
         }
 
-    }
-
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.menu_main, menu );
-        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected( item );
-    }*/
+    public void onItemRecyclerClicked(int postion, int actions) {
+        Event event = listEvent.get( postion );
+        Intent intent = new Intent( MainActivity.this, ActivityEditEvent.class );
+        intent.putExtra( "calendar", event );
+        startActivityForResult( intent, REQUEST_CODE );
+    }
 }
