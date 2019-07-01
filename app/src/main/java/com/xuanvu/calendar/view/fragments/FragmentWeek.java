@@ -90,7 +90,7 @@ public class FragmentWeek extends Fragment implements WeekView.EventClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 200) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == FragmentWeek.RESULT_CODE_ADD) {
 //                // Nhận dữ liệu từ Intent trả về
 //                ArrayList<WeekViewEvent> weekViewEvents = new ArrayList<>(  );
 //                weekViewEvents = (ArrayList<WeekViewEvent>) data.getSerializableExtra("DATA_WEEK_EVENT"  );
